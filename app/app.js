@@ -14,6 +14,7 @@ app.get('/ping', (req, res) => {
 app.get('/dictionary', async (req, res) => {
     const word = req.query.word;
     
+
     if (!word) {
       return res.status(400).json({ error: 'No word provided' });
     }
@@ -54,6 +55,7 @@ app.get('/quote', async (req, res) => {
       if (!response) {
         return res.status(response.status).json({ error: 'Error fetching random quote' });
       }
+      
       res.json({ quote: response.data[0].content, author: response.data[0].author });
     } catch (error) {
       res.status(500).json({ error: 'Internal Server Error' });

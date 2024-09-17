@@ -1,6 +1,10 @@
 version: '3'
 
 services:
+    node:
+        container_name: app
+        build: ./app
+
     nginx:
         image: nginx:1.25.4
         ports:
