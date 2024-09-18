@@ -509,41 +509,41 @@
         "options": [
           {
             "selected": true,
-            "text": "1c25-tp-1_node_1",
-            "value": "1c25-tp-1_node_1"
+            "text": "2C24-TP-1-node-1",
+            "value": "2C24-TP-1-node-1"
           },
           {
             "selected": false,
-            "text": "1c25-tp-1_node_2",
-            "value": "1c25-tp-1_node_2"
+            "text": "2C24-TP-1-node-2",
+            "value": "2C24-TP-1-node-2"
           },
           {
             "selected": false,
-            "text": "1c25-tp-1_node_3",
-            "value": "1c25-tp-1_node_3"
+            "text": "2C24-TP-1-node-3",
+            "value": "2C24-TP-1-node-3"
           },
           {
             "selected": false,
-            "text": "1c25-tp-1_cadvisor_1",
-            "value": "1c25-tp-1_cadvisor_1"
+            "text": "2C24-TP-1-cadvisor-1",
+            "value": "2C24-TP-1-cadvisor-1"
           },
           {
             "selected": false,
-            "text": "1c25-tp-1_grafana_1",
-            "value": "1c25-tp-1_grafana_1"
+            "text": "2C24-TP-1-grafana-1",
+            "value": "2C24-TP-1-grafana-1"
           },
           {
             "selected": false,
-            "text": "1c25-tp-1_graphite_1",
-            "value": "1c25-tp-1_graphite_1"
+            "text": "2C24-TP-1-graphite-1",
+            "value": "2C24-TP-1-graphite-1"
           },
           {
             "selected": false,
-            "text": "1c25-tp-1_nginx_1",
-            "value": "1c25-tp-1_nginx_1"
+            "text": "2C24-TP-1-nginx-1",
+            "value": "2C24-TP-1-nginx-1"
           }
         ],
-        "query": "1c25-tp-1_node_1, 1c25-tp-1_node_2, 1c25-tp-1_node_3, 1c25-tp-1_cadvisor_1, 1c25-tp-1_grafana_1, 1c25-tp-1_graphite_1,  1c25-tp-1_nginx_1, 1c25-tp-1_bbox_1",
+        "query": "2C24-TP-1-node-1, 2C24-TP-1-node-2, 2C24-TP-1-node-3, 2C24-TP-1-cadvisor-1, 2C24-TP-1-grafana-1, 2C24-TP-1-graphite-1, 2C24-TP-1-nginx-1, 1c25-tp-1_bbox_1",
         "queryValue": "",
         "skipUrlSync": false,
         "type": "custom"
