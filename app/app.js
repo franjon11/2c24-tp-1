@@ -1,10 +1,17 @@
 const express = require('express');
 const axios = require('axios');
 const { config } = require('dotenv');
+const { nanoid } = require('nanoid');
 config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const id = nanoid();
+
+app.use((req, res, next) => {
+    res.setHeader('X-API-Id', id);
+    next();
+});
 
 app.get('/ping', (req, res) => {
     res.json({ message: 'pong' });
