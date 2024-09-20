@@ -1,7 +1,7 @@
-const express = require('express');
-const axios = require('axios');
-const { config } = require('dotenv');
-const { nanoid } = require('nanoid');
+import express from 'express';
+import axios from 'axios';
+import { config } from 'dotenv';
+import { nanoid } from 'nanoid';
 config();
 
 const app = express();
