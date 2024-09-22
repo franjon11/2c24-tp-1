@@ -1,10 +1,17 @@
-const express = require('express');
-const axios = require('axios');
-const { config } = require('dotenv');
+import express from 'express';
+import axios from 'axios';
+import { config } from 'dotenv';
+import { nanoid } from 'nanoid';
 config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const id = nanoid();
+
+app.use((req, res, next) => {
+    res.setHeader('X-API-Id', id);
+    next();
+});
 
 app.get('/ping', (req, res) => {
     res.json({ message: 'pong' });
@@ -14,6 +21,7 @@ app.get('/ping', (req, res) => {
 app.get('/dictionary', async (req, res) => {
     const word = req.query.word;
     
+
     if (!word) {
       return res.status(400).json({ error: 'No word provided' });
     }
@@ -54,6 +62,7 @@ app.get('/quote', async (req, res) => {
       if (!response) {
         return res.status(response.status).json({ error: 'Error fetching random quote' });
       }
+      
       res.json({ quote: response.data[0].content, author: response.data[0].author });
     } catch (error) {
       res.status(500).json({ error: 'Internal Server Error' });
