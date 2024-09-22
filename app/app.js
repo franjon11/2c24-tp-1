@@ -82,17 +82,33 @@ app.get('/spaceflight_news', async (req, res) => {
 
 app.get('/quote', async (req, res) => {
     try {
-      const response = await axios.get('http://api.quotable.io/quotes/random');
-      
-      if (!response) {
-        return res.status(response.status).json({ error: 'Error fetching random quote' });
+      // Verify if the cache is empty
+      const cachedQuotes = await client.lRange('quotes', 0, -1);
+
+      if (cachedQuotes.length === 0) {
+        console.log('Cache is empty. Fetching quotes from API');
+        const response = await axios.get('http://api.quotable.io/quotes/random?limit=10');
+        
+        const quotes = response.data.map(quote => JSON.stringify({ quote: quote.content, author: quote.author }));
+        
+        await client.rPush('quotes', quotes);
+        //console.log(quotes);
+        return res.json(JSON.parse(quotes[0]));
       }
-      
-      res.json({ quote: response.data[0].content, author: response.data[0].author });
+      // Get a random quote from the cache
+      const randomIndex = Math.floor(Math.random() * cachedQuotes.length);
+      const randomQuote = cachedQuotes[randomIndex];
+
+      // Remove the quote from the cache
+      await client.lRem('quotes', 1, randomQuote);
+
+      res.json(JSON.parse(randomQuote));
     } catch (error) {
+      console.log(error);
       res.status(500).json({ error: 'Internal Server Error' });
     }
-  });
+});
+
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
