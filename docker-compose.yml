@@ -1,9 +1,21 @@
 version: '3'
 
 services:
+    redis:
+        image: redis:alpine
+        ports:
+            - "6379:6379"
+        volumes:
+            - redis_data:/data
+
     node:
         build: ./app
         container_name: app
+        environment:
+            - REDIS_HOST=redis
+            - REDIS_PORT=6379
+        links:
+            - redis
 
     nginx:
         image: nginx:1.25.4
@@ -47,4 +59,6 @@ services:
 
 volumes:
     grafana_config:
+        driver: local
+    redis_data:
         driver: local

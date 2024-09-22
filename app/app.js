@@ -6,7 +6,9 @@ import { createClient } from 'redis';
 config();
 
 
-const client = await createClient()
+const client = await createClient({
+    url: 'redis://redis:6379'
+  })
   .on('error', err => console.log('Redis Client Error', err))
   .connect();
 
@@ -86,13 +88,11 @@ app.get('/quote', async (req, res) => {
       const cachedQuotes = await client.lRange('quotes', 0, -1);
 
       if (cachedQuotes.length === 0) {
-        console.log('Cache is empty. Fetching quotes from API');
         const response = await axios.get('http://api.quotable.io/quotes/random?limit=10');
         
         const quotes = response.data.map(quote => JSON.stringify({ quote: quote.content, author: quote.author }));
         
         await client.rPush('quotes', quotes);
-        //console.log(quotes);
         return res.json(JSON.parse(quotes[0]));
       }
       // Get a random quote from the cache
@@ -104,7 +104,6 @@ app.get('/quote', async (req, res) => {
 
       res.json(JSON.parse(randomQuote));
     } catch (error) {
-      console.log(error);
       res.status(500).json({ error: 'Internal Server Error' });
     }
 });
