@@ -5,6 +5,14 @@ services:
         build: ./app
         container_name: app
 
+    node2:
+        build: ./app
+        container_name: app2
+
+    node3:
+        build: ./app
+        container_name: app3
+        
     nginx:
         image: nginx:1.25.4
         ports:
@@ -48,3 +56,4 @@ services:
 volumes:
     grafana_config:
         driver: local
+     
