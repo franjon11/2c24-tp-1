@@ -22,10 +22,17 @@ config:
       duration: 1h
       arrivalRate: 10
       rampTo: 15
+
+  payload:
+    path: '../store/static/files/wordlist.csv'
+    fields:
+      - "word"
+    randomize: true
+
     
 
 scenarios:
-  - name: Root (/)
+  - name: Dictionary
     flow:
       - get:
-          url: '/ping'
+          url: '/dictionary/{{ word }}'
