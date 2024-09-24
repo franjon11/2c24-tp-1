@@ -56,9 +56,9 @@ app.get('/dictionary', async (req, res) => {
 });
 
 
-/// Active population: We will populate the cache every 1 hour
+/// Active population: We will populate the cache every 10 mins
 /// Size: 5 news
-/// TTL: 1 hour
+/// TTL: 10 min
 app.get('/spaceflight_news', async (req, res) => {
     const cachedNews = await client.get('spaceflight_news');
     
@@ -74,8 +74,8 @@ app.get('/spaceflight_news', async (req, res) => {
       }
       const titles = response.data.results.map(article => article.title);
       
-      // Save to cache for 1 hour
-      await client.set('spaceflight_news', JSON.stringify(titles), { EX: 3600 });
+      // Save to cache for 10 mins
+      await client.set('spaceflight_news', JSON.stringify(titles), { EX: 600 });
       res.json(titles);
     } catch (error) {
       res.status(500).json({ error: 'Internal Server Error' });
@@ -83,29 +83,17 @@ app.get('/spaceflight_news', async (req, res) => {
   });
 
 app.get('/quote', async (req, res) => {
-    try {
-      // Verify if the cache is empty
-      const cachedQuotes = await client.lRange('quotes', 0, -1);
-
-      if (cachedQuotes.length === 0) {
-        const response = await axios.get('http://api.quotable.io/quotes/random?limit=10');
-        
-        const quotes = response.data.map(quote => JSON.stringify({ quote: quote.content, author: quote.author }));
-        
-        await client.rPush('quotes', quotes);
-        return res.json(JSON.parse(quotes[0]));
-      }
-      // Get a random quote from the cache
-      const randomIndex = Math.floor(Math.random() * cachedQuotes.length);
-      const randomQuote = cachedQuotes[randomIndex];
-
-      // Remove the quote from the cache
-      await client.lRem('quotes', 1, randomQuote);
-
-      res.json(JSON.parse(randomQuote));
-    } catch (error) {
-      res.status(500).json({ error: 'Internal Server Error' });
+  try {
+    const response = await axios.get('http://api.quotable.io/quotes/random');
+    
+    if (!response) {
+      return res.status(response.status).json({ error: 'Error fetching random quote' });
     }
+    
+    res.json({ quote: response.data[0].content, author: response.data[0].author });
+  } catch (error) {
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 });
 
 
