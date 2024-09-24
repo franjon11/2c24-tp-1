@@ -25,7 +25,7 @@ config:
     
 
 scenarios:
-  - name: Root (/)
+  - name: Quote
     flow:
       - get:
-          url: '/ping'
+          url: '/quote'
