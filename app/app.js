@@ -1,7 +1,7 @@
-import express from 'express';
-import axios from 'axios';
-import { config } from 'dotenv';
-import { nanoid } from 'nanoid';
+import express from "express";
+import axios from "axios";
+import { config } from "dotenv";
+import { nanoid } from "nanoid";
 import { StatsD } from "hot-shots";
 config();
 
@@ -13,32 +13,37 @@ var stats = new StatsD({
   host: "graphite",
   port: 8125,
   prefix: `hotshots.`,
-})
+});
 
 app.use((req, res, next) => {
   res.setHeader("X-API-Id", id);
   next();
 });
 
-app.get('/ping', (req, res) => {
-    const startTime = new Date();
-    res.json({ message: 'pong' });
-    stats.timing("PING", startTime);
+app.get("/ping", (req, res) => {
+  const endpointTime = new Date();
+  res.json({ message: "pong" });
+  stats.timing("Endpoint", endpointTime);
 });
 
 app.get("/dictionary", async (req, res) => {
+  const endpointTime = new Date();
   const word = req.query.word;
 
   if (!word) {
+    stats.timing("Endpoint", endpointTime);
     return res.status(400).json({ error: "No word provided" });
   }
 
   try {
+    const apiTime = new Date();
     const response = await axios.get(
       `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`
     );
+    stats.timing("API", apiTime);
 
     if (!response) {
+      stats.timing("Endpoint", endpointTime);
       return res
         .status(response.status)
         .json({ error: "Error fetching word definition" });
@@ -51,15 +56,20 @@ app.get("/dictionary", async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error" });
   }
+  stats.timing("Endpoint", endpointTime);
 });
 
 app.get("/spaceflight_news", async (req, res) => {
+  const endpointTime = new Date();
   try {
+    const apiTime = new Date();
     const response = await axios.get(
       "https://api.spaceflightnewsapi.net/v4/articles?limit=5"
     );
+    stats.timing("API", apiTime);
 
     if (!response) {
+      stats.timing("Endpoint", endpointTime);
       return res
         .status(response.status)
         .json({ error: "Error fetching spaceflight news" });
@@ -69,13 +79,18 @@ app.get("/spaceflight_news", async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error" });
   }
+  stats.timing("Endpoint", endpointTime);
 });
 
 app.get("/quote", async (req, res) => {
+  const endpointTime = new Date();
   try {
+    const apiTime = new Date();
     const response = await axios.get("http://api.quotable.io/quotes/random");
+    stats.timing("API", apiTime);
 
     if (!response) {
+      stats.timing("Endpoint", endpointTime);
       return res
         .status(response.status)
         .json({ error: "Error fetching random quote" });
@@ -88,6 +103,7 @@ app.get("/quote", async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error" });
   }
+  stats.timing("Endpoint", endpointTime);
 });
 
 app.listen(PORT, () => {
