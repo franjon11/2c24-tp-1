@@ -12,16 +12,15 @@ config:
 
   phases:
     - name: Ramp
-      duration: 1h
-      arrivalRate: 1
-      rampTo: 10
+      duration: 300
+      arrivalRate: 10
+      rampTo: 40
     - name: Plain
-      duration: 2h
-      arrivalRate: 10
-    - name: Ramp2
-      duration: 1h
-      arrivalRate: 10
-      rampTo: 15
+      duration: 50
+      arrivalRate: 40
+    - name: High Plain
+      duration: 250
+      arrivalRate: 40
 
   payload:
     path: '../store/static/files/wordlist.csv'

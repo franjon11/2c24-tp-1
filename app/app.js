@@ -2,11 +2,18 @@ import express from 'express';
 import axios from 'axios';
 import { config } from 'dotenv';
 import { nanoid } from 'nanoid';
+import { StatsD } from "hot-shots";
 config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 const id = nanoid();
+
+var stats = new StatsD({
+  host: "graphite",
+  port: 8125,
+  prefix: `hotshots.`,
+})
 
 app.use((req, res, next) => {
     res.setHeader('X-API-Id', id);
@@ -14,7 +21,9 @@ app.use((req, res, next) => {
 });
 
 app.get('/ping', (req, res) => {
+    const startTime = new Date();
     res.json({ message: 'pong' });
+    stats.timing("PING", startTime);
 });
 
 
