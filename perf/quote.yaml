@@ -13,22 +13,22 @@ config:
   phases:
     - name: Ramp
       duration: 100
-      arrivalRate: 1
-      rampTo: 15
+      arrivalRate: 10
+      rampTo: 50
     - name: Plain
       duration: 200
-      arrivalRate: 15
+      arrivalRate: 50
     - name: Ramp 2
       duration: 100
-      arrivalRate: 15
-      rampTo: 25
+      arrivalRate: 50
+      rampTo: 70
     - name: Slide
-      duration: 50
-      arrivalRate: 25
-      rampTo: 10
+      duration: 100
+      arrivalRate: 70
+      rampTo: 50
     - name: Spike
       duration: 100
-      arrivalRate: 30    
+      arrivalRate: 100    
     
 
 scenarios:
