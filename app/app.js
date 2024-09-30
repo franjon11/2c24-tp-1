@@ -42,13 +42,6 @@ app.get("/dictionary", async (req, res) => {
     );
     stats.timing("API", apiTime);
 
-    if (!response) {
-      stats.timing("Endpoint", endpointTime);
-      return res
-        .status(response.status)
-        .json({ error: "Error fetching word definition" });
-    }
-
     res.json({
       phonetics: response.data[0].phonetics,
       meanings: response.data[0].meanings,
@@ -68,12 +61,6 @@ app.get("/spaceflight_news", async (req, res) => {
     );
     stats.timing("API", apiTime);
 
-    if (!response) {
-      stats.timing("Endpoint", endpointTime);
-      return res
-        .status(response.status)
-        .json({ error: "Error fetching spaceflight news" });
-    }
     const titles = response.data.results.map((article) => article.title);
     res.json(titles);
   } catch (error) {
@@ -88,13 +75,6 @@ app.get("/quote", async (req, res) => {
     const apiTime = new Date();
     const response = await axios.get("http://api.quotable.io/quotes/random");
     stats.timing("API", apiTime);
-
-    if (!response) {
-      stats.timing("Endpoint", endpointTime);
-      return res
-        .status(response.status)
-        .json({ error: "Error fetching random quote" });
-    }
 
     res.json({
       quote: response.data[0].content,
