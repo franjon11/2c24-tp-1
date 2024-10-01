@@ -46,6 +46,7 @@ app.get("/dictionary", async (req, res) => {
   // check if word is in cache
   const cachedWord = await client.get(`dictionary:${word}`);
   if (cachedWord) {
+    stats.timing("Endpoint", endpointTime);
     return res.json(JSON.parse(cachedWord));
   }
 
@@ -55,13 +56,6 @@ app.get("/dictionary", async (req, res) => {
       `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`
     );
     stats.timing("API", apiTime);
-
-    if (!response) {
-      stats.timing("Endpoint", endpointTime);
-      return res
-        .status(response.status)
-        .json({ error: "Error fetching word definition" });
-    }
 
     const data = {
       phonetics: response.data[0].phonetics,
@@ -85,6 +79,7 @@ app.get("/spaceflight_news", async (req, res) => {
   const cachedNews = await client.get("spaceflight_news");
 
   if (cachedNews) {
+    stats.timing("Endpoint", endpointTime);
     return res.json(JSON.parse(cachedNews));
   }
   try {
@@ -94,12 +89,6 @@ app.get("/spaceflight_news", async (req, res) => {
     );
     stats.timing("API", apiTime);
 
-    if (!response) {
-      stats.timing("Endpoint", endpointTime);
-      return res
-        .status(response.status)
-        .json({ error: "Error fetching spaceflight news" });
-    }
     const titles = response.data.results.map((article) => article.title);
 
     // Save to cache for 10 mins
@@ -115,19 +104,11 @@ app.get("/quote", async (req, res) => {
   const endpointTime = new Date();
   try {
     const apiTime = new Date();
-    const response = await axios.get("http://api.quotable.io/quotes/random");
+    const response = await axios.get("https://techy-api.vercel.app/api/json");
     stats.timing("API", apiTime);
 
-    if (!response) {
-      stats.timing("Endpoint", endpointTime);
-      return res
-        .status(response.status)
-        .json({ error: "Error fetching random quote" });
-    }
-
     res.json({
-      quote: response.data[0].content,
-      author: response.data[0].author,
+      quote: response.data.message,
     });
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error" });
