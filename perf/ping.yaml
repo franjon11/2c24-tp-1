@@ -36,17 +36,11 @@ config:
     - name: Plain 3
       duration: 90
       arrivalRate: 3
-
-  payload:
-    path: '../store/static/files/wordlist.csv'
-    fields:
-      - "word"
-    randomize: true
-
+    
     
 
 scenarios:
-  - name: Dictionary
+  - name: Ping
     flow:
       - get:
-          url: '/dictionary/?word={{ word }}'
+          url: '/ping'
