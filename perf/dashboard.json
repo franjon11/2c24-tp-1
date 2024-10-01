@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 3,
+  "id": 4,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -82,16 +82,19 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 12,
+        "w": 24,
         "x": 0,
         "y": 0
       },
       "id": 7,
       "options": {
         "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
+          "calcs": [
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "right",
           "showLegend": true
         },
         "tooltip": {
@@ -107,7 +110,7 @@
           },
           "refCount": 0,
           "refId": "A",
-          "target": "stats.timers.hotshots.API.median"
+          "target": "alias(stats.timers.hotshots.API.median, 'Median')"
         },
         {
           "datasource": {
@@ -117,7 +120,7 @@
           "hide": false,
           "refCount": 0,
           "refId": "B",
-          "target": "stats.timers.hotshots.API.upper"
+          "target": "alias(stats.timers.hotshots.API.upper, 'Upper')"
         }
       ],
       "title": "API Latency",
@@ -183,16 +186,19 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 12,
+        "w": 24,
         "x": 0,
         "y": 8
       },
       "id": 6,
       "options": {
         "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
+          "calcs": [
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "right",
           "showLegend": true
         },
         "tooltip": {
@@ -208,7 +214,7 @@
           },
           "refCount": 0,
           "refId": "A",
-          "target": "stats.timers.hotshots.Endpoint.median"
+          "target": "alias(stats.timers.hotshots.Endpoint.median, 'Median')"
         },
         {
           "datasource": {
@@ -218,7 +224,7 @@
           "hide": false,
           "refCount": 0,
           "refId": "B",
-          "target": "stats.timers.hotshots.Endpoint.upper"
+          "target": "alias(stats.timers.hotshots.Endpoint.upper, 'Upper')"
         }
       ],
       "title": "Endpoint Latency",
@@ -301,12 +307,14 @@
       },
       "yaxes": [
         {
+          "$$hashKey": "object:137",
           "format": "rps",
           "label": "",
           "logBase": 1,
           "show": true
         },
         {
+          "$$hashKey": "object:138",
           "format": "short",
           "logBase": 1,
           "show": true
@@ -378,6 +386,7 @@
             "type": "graphite",
             "uid": "b049e5b9-c565-4e3b-b970-bcfd853572a3"
           },
+          "refCount": 0,
           "refId": "B",
           "target": "alias(sumSeries(stats.gauges.$server.errors.*), 'Errored')",
           "textEditor": true
@@ -387,6 +396,7 @@
             "type": "graphite",
             "uid": "b049e5b9-c565-4e3b-b970-bcfd853572a3"
           },
+          "refCount": 0,
           "refId": "A",
           "target": "alias(stats.gauges.$server.codes.200, 'Completed')"
         },
@@ -395,6 +405,7 @@
             "type": "graphite",
             "uid": "b049e5b9-c565-4e3b-b970-bcfd853572a3"
           },
+          "refCount": 0,
           "refId": "C",
           "target": "alias(stats.gauges.$server.pendingRequests, 'Pending')"
         },
@@ -403,8 +414,9 @@
             "type": "graphite",
             "uid": "b049e5b9-c565-4e3b-b970-bcfd853572a3"
           },
+          "refCount": 0,
           "refId": "D",
-          "target": "alias(stats.gauges.$server.codes.429, 'Limited')"
+          "target": "alias(stats.gauges.$server.codes.500, 'Limited')"
         }
       ],
       "thresholds": [],
@@ -423,11 +435,13 @@
       },
       "yaxes": [
         {
+          "$$hashKey": "object:747",
           "format": "short",
           "logBase": 1,
           "show": true
         },
         {
+          "$$hashKey": "object:748",
           "format": "short",
           "logBase": 1,
           "show": true
@@ -652,7 +666,7 @@
       }
     }
   ],
-  "refresh": "5s",
+  "refresh": false,
   "schemaVersion": 38,
   "style": "dark",
   "tags": [],
@@ -734,8 +748,8 @@
     ]
   },
   "time": {
-    "from": "now-3m",
-    "to": "now"
+    "from": "2024-10-01T20:40:28.174Z",
+    "to": "2024-10-01T20:48:31.838Z"
   },
   "timepicker": {
     "refresh_intervals": [
