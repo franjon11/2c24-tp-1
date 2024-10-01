@@ -73,12 +73,11 @@ app.get("/quote", async (req, res) => {
   const endpointTime = new Date();
   try {
     const apiTime = new Date();
-    const response = await axios.get("http://api.quotable.io/quotes/random");
+    const response = await axios.get("https://techy-api.vercel.app/api/json");
     stats.timing("API", apiTime);
 
     res.json({
-      quote: response.data[0].content,
-      author: response.data[0].author,
+      quote: response.data.message,
     });
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error" });

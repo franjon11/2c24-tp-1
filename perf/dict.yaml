@@ -12,16 +12,15 @@ config:
 
   phases:
     - name: Ramp
-      duration: 1h
+      duration: 300
       arrivalRate: 1
-      rampTo: 10
+      rampTo: 5
     - name: Plain
-      duration: 2h
+      duration: 50
+      arrivalRate: 5
+    - name: High Plain
+      duration: 250
       arrivalRate: 10
-    - name: Ramp2
-      duration: 1h
-      arrivalRate: 10
-      rampTo: 15
 
   payload:
     path: '../store/static/files/wordlist.csv'
@@ -35,4 +34,4 @@ scenarios:
   - name: Dictionary
     flow:
       - get:
-          url: '/dictionary/{{ word }}'
+          url: '/dictionary/?word={{ word }}'
