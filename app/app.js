@@ -6,11 +6,37 @@ import { createClient } from "redis";
 import { StatsD } from "hot-shots";
 config();
 
+
 const client = await createClient({
   url: "redis://redis:6379",
 })
   .on("error", (err) => console.log("Redis Client Error", err))
   .connect();
+
+const fetchSpaceflight = async () => {
+  try {
+    const apiTime = new Date();
+    const response = await axios.get(
+      "https://api.spaceflightnewsapi.net/v4/articles?limit=5"
+    );
+    stats.timing("API", apiTime);
+
+    const titles = response.data.results.map((article) => article.title);
+
+    // Save to cache for 10 mins
+    await client.set("spaceflight_news", JSON.stringify(titles), { EX: 20 });
+  } catch (error) {
+    console.error("Error fetching API data");
+  }
+}
+
+const intervalID = setInterval(fetchSpaceflight, 10 * 1000);
+await fetchSpaceflight();
+
+process.on('SIGINT', () => {
+  clearInterval(intervalID);
+  process.exit(0);
+});
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -81,20 +107,7 @@ app.get("/spaceflight_news", async (req, res) => {
   if (cachedNews) {
     stats.timing("Endpoint", endpointTime);
     return res.json(JSON.parse(cachedNews));
-  }
-  try {
-    const apiTime = new Date();
-    const response = await axios.get(
-      "https://api.spaceflightnewsapi.net/v4/articles?limit=5"
-    );
-    stats.timing("API", apiTime);
-
-    const titles = response.data.results.map((article) => article.title);
-
-    // Save to cache for 10 mins
-    await client.set("spaceflight_news", JSON.stringify(titles), { EX: 600 });
-    res.json(titles);
-  } catch (error) {
+  } else {
     res.status(500).json({ error: "Internal Server Error" });
   }
   stats.timing("Endpoint", endpointTime);

@@ -38,7 +38,7 @@ config:
       arrivalRate: 3
 
   payload:
-    path: '../store/static/files/wordlist.csv'
+    path: '../store/static/files/wordlist-500.csv'
     fields:
       - "word"
     randomize: true
